@@ -19,7 +19,7 @@ return async (req, res, next) => {
             if(err) {
                 return res.status(401).json(authError)
             }
-            res.token = decoded
+            req.token = decoded
             next()
         })
 

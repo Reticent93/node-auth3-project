@@ -13,10 +13,10 @@ router.post('/register', async(req, res, next) => {
 
         if(user) {
             res.status(409).json({
-                message: 'Username is alread taken'
+                message: 'Username is alread taken' 
             })
         }
-        
+
         res.status(201).json(await Users.add(req.body))
     }catch(err) {
         next(err)
