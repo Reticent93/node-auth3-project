@@ -3,8 +3,8 @@ const db = require('../data/config')
 
 async function add(user) {
     user.password = await bycrypt.hash(user.password, 13)
-    const [id] = await db('users').insert(users)
-    return findBy(id)
+    const [id] = await db('users').insert(user)
+    return findById(id)
 }
 
 function find() {

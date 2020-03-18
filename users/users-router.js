@@ -5,7 +5,7 @@ const restrictRole = require('../middleware/restrict-role')
 
 const router = express.Router()
 
-router.get('/', restrict(), restrictRole(), (req, res, next) => {
+router.get('/', restrict(), restrictRole('admin'), async(req, res, next) => {
     try{
         res.json(await Users.find())
     }catch(err) {

@@ -2,27 +2,28 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Users = require('../users/users-model')
-
+const restrict = require('../middleware/restrict')
 
 const router = express.Router()
 
 router.post('/register', async(req, res, next) => {
     try {
         const {username} = req.body
-        const user = await Users.findBy({username}).first
+        const user = await Users.findBy({username}).first()
 
         if(user) {
             res.status(409).json({
                 message: 'Username is alread taken'
             })
         }
+        
         res.status(201).json(await Users.add(req.body))
     }catch(err) {
         next(err)
     }
 })
 
-router.post('/login', (req, res, next) => {
+router.post('/login', async(req, res, next) => {
     const authError = {
         message: "Invalid credentials"
     }
@@ -38,7 +39,7 @@ router.post('/login', (req, res, next) => {
         }
         const payload = {
             userId: user.id,
-            userRole = 'normal'
+            userRole: 'normal'
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET)
 
@@ -50,6 +51,10 @@ router.post('/login', (req, res, next) => {
         next(err)
     }
 
+})
+
+router.get('/logout', restrict(), (req, res, next) => {
+    res.end()
 })
 
 module.exports = router
